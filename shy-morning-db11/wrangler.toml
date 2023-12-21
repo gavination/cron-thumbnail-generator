@@ -1,0 +1,15 @@
+name = "shy-morning-db11"
+main = "src/index.ts"
+compatibility_date = "2023-12-18"
+account_id = "6f65ec4405c3758651173521d7b8530e"
+
+# Cron Triggers
+# Docs: https://developers.cloudflare.com/workers/platform/triggers/cron-triggers/
+# Configuration: https://developers.cloudflare.com/workers/wrangler/configuration/#triggers
+[triggers]
+crons = ["* * * * *"] # * * * * * = run every minute
+
+# R2 binding
+[[r2_buckets]]
+binding = 'IMAGE_BUCKET' # <~ valid JavaScript variable name
+bucket_name = 'images'

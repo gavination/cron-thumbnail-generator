@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+dependencies:
+  xstate:
+    specifier: ^5.3.1
+    version: 5.3.1
+
 devDependencies:
   '@cloudflare/workers-types':
     specifier: ^4.20231218.0
@@ -742,6 +747,10 @@ packages:
       utf-8-validate:
         optional: true
     dev: true
+
+  /xstate@5.3.1:
+    resolution: {integrity: sha512-j4lYbMKqTQ1gxS0NAhjX0JkFJ44OLqYgXV7kVSc0YpnENhPNigvrFMqpBFtfho39pgzdcmpmnmUyEUVWwYMOdA==}
+    dev: false
 
   /xxhash-wasm@1.0.2:
     resolution: {integrity: sha512-ibF0Or+FivM9lNrg+HGJfVX8WJqgo+kCLDc4vx6xMeTce7Aj+DLttKbxxRR/gNLSAelRc1omAPlJ77N/Jem07A==}
