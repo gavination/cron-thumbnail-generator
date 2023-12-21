@@ -23,8 +23,8 @@ export interface Env {
 	// MY_DURABLE_OBJECT: DurableObjectNamespace;
 	//
 	// Example binding to R2. Learn more at https://developers.cloudflare.com/workers/runtime-apis/r2/
-	// MY_BUCKET: R2Bucket;
-	//
+	IMAGE_BUCKET: R2Bucket;
+
 	// Example binding to a Service. Learn more at https://developers.cloudflare.com/workers/runtime-apis/service-bindings/
 	// MY_SERVICE: Fetcher;
 	//
@@ -46,6 +46,10 @@ export default {
 		let resp = await fetch('https://api.cloudflare.com/client/v4/ips');
 		let wasSuccessful = resp.ok ? 'success' : 'fail';
 
+		// listing objects in R2 bucket
+		let objects = await env.IMAGE_BUCKET.list();
+		console.log('objects in bucket', objects);
+		// initializing machine
 		const imageActor = createActor(machine).start();
 		imageActor.send({ type: 'SCAN' });
 
