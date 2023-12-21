@@ -12,7 +12,7 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
-import { createActor } from 'xstate';
+import { Snapshot, createActor } from 'xstate';
 import { machine } from './cronMachine';
 
 export interface Env {
@@ -49,9 +49,29 @@ export default {
 		// listing objects in R2 bucket
 		let objects = await env.IMAGE_BUCKET.list();
 		console.log('objects in bucket', objects);
+
+		let restoredState = await env.IMAGE_BUCKET.get('actor.json');
+
+		if (restoredState) {
+			console.log('restored state', restoredState);
+			const stateValue: Snapshot<JSON> = await restoredState.json();
+
+			console.log('restored state value', stateValue);
+			const imageActor = createActor(machine, { snapshot: stateValue }).start();
+			imageActor.send({ type: 'SCAN' });
+
+			// save the state and context of the machine
+			const state = imageActor.getPersistedSnapshot();
+			await env.IMAGE_BUCKET.put('actor.json', JSON.stringify(state));
+		}
+
 		// initializing machine
 		const imageActor = createActor(machine).start();
 		imageActor.send({ type: 'SCAN' });
+
+		// save the state and context of the machine
+		const state = imageActor.getPersistedSnapshot();
+		await env.IMAGE_BUCKET.put('actor.json', JSON.stringify(state));
 
 		// You could store this result in KV, write to a D1 Database, or publish to a Queue.
 		// In this template, we'll just log the result:
